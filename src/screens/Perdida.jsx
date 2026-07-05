@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { preguntarAlCompanero } from '../lib/ia.js'
 import { hablar, callar, escuchar, detenerEscucha, hayEscucha } from '../lib/voz.js'
 import { ubicacionActual } from '../lib/ubicacion.js'
+import Encabezado from '../components/Encabezado.jsx'
+import Icono from '../components/Icono.jsx'
 
 const SUGERENCIAS = ['No sé dónde estoy', 'Tengo miedo', 'Quiero ir a casa', 'Ayúdame a calmarme']
 
@@ -13,7 +15,6 @@ export default function Perdida({ ajustes, lugares, onVolver, onCasa }) {
   const ubicacionRef = useRef(null)
   const finRef = useRef(null)
 
-  // Contexto para la IA (ubicación, casa, lugares).
   function contexto() {
     return {
       nombre: ajustes?.nombreUsuaria || '',
@@ -23,7 +24,6 @@ export default function Perdida({ ajustes, lugares, onVolver, onCasa }) {
     }
   }
 
-  // Al entrar: obtener ubicación (sin bloquear) y saludar con calma.
   useEffect(() => {
     ubicacionActual().then((u) => { ubicacionRef.current = u }).catch(() => {})
     enviar('Me siento perdida y desorientada.', true)
@@ -62,17 +62,19 @@ export default function Perdida({ ajustes, lugares, onVolver, onCasa }) {
       if (dicho) enviar(dicho)
     } catch (e) {
       setEscuchando(false)
-      setMensajes((prev) => [...prev, { de: 'ia', texto: 'No te escuché bien 💚. Puedes escribirme o tocar el micrófono otra vez.' }])
+      setMensajes((prev) => [...prev, { de: 'ia', texto: 'No te escuché bien 💗. Puedes escribirme o tocar el micrófono otra vez.' }])
     }
   }
 
+  const botonCasa = (
+    <button className="boton tenue" onClick={onCasa}>
+      <Icono nombre="casa" size={18} /> A casa
+    </button>
+  )
+
   return (
-    <div className="contenido" style={{ minHeight: '100%' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <button className="volver" onClick={onVolver}>← Volver</button>
-        <button className="boton principal" onClick={onCasa}>🏠 A casa</button>
-      </div>
-      <h2 className="titulo-pantalla">Estoy contigo 💚</h2>
+    <div className="vista con-atras">
+      <Encabezado titulo="Estoy contigo 💗" onAtras={onVolver} accion={botonCasa} />
 
       <div className="chat">
         <div className="mensajes">
@@ -99,13 +101,13 @@ export default function Perdida({ ajustes, lugares, onVolver, onCasa }) {
             placeholder="Escríbeme o toca el micrófono…"
           />
           {hayEscucha() ? (
-            <button
-              className={`boton-voz ${escuchando ? 'escuchando' : ''}`}
-              onClick={hablarPorVoz}
-              aria-label="Hablar por voz"
-            >🎤</button>
+            <button className={`boton-voz ${escuchando ? 'escuchando' : ''}`} onClick={hablarPorVoz} aria-label="Hablar por voz">
+              <Icono nombre="micro" size={24} />
+            </button>
           ) : (
-            <button className="boton-voz" onClick={() => enviar(texto)} aria-label="Enviar">➤</button>
+            <button className="boton-voz" onClick={() => enviar(texto)} aria-label="Enviar">
+              <Icono nombre="enviar" size={22} />
+            </button>
           )}
         </div>
       </div>

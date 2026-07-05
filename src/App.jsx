@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
 import Home from './screens/Home.jsx'
+import Explorar from './screens/Explorar.jsx'
 import Lugares from './screens/Lugares.jsx'
 import Mapa from './screens/Mapa.jsx'
 import Perdida from './screens/Perdida.jsx'
 import Ajustes from './screens/Ajustes.jsx'
 import Seguir from './screens/Seguir.jsx'
 import BotonSOS from './components/BotonSOS.jsx'
+import BarraNav from './components/BarraNav.jsx'
 import { leerLocal, sincronizarDesdeNube, guardar } from './lib/almacenamiento.js'
 import { iniciarCompartir, detenerCompartir } from './lib/ubicacionVivo.js'
 
@@ -14,11 +16,10 @@ const paramSeguir = new URLSearchParams(window.location.search).get('seguir')
 
 export default function App() {
   const [datos, setDatos] = useState(() => leerLocal())
-  const [pantalla, setPantalla] = useState('home')
+  const [tab, setTab] = useState('inicio') // inicio | mapa | lugares
+  const [sub, setSub] = useState(null) // null | ruta | perdida | ajustes
   const [destino, setDestino] = useState(null)
-  const [avisoCasa, setAvisoCasa] = useState(false)
 
-  // Sincronizar con la nube al abrir (si Supabase está configurado).
   useEffect(() => {
     if (paramSeguir) return
     sincronizarDesdeNube().then((remoto) => { if (remoto) setDatos(remoto) })
@@ -27,7 +28,6 @@ export default function App() {
   const ajustes = datos.ajustes
   const lugares = datos.lugares || []
 
-  // Compartir ubicación en vivo mientras la opción esté activada.
   useEffect(() => {
     if (paramSeguir) return
     if (ajustes?.compartirEnVivo) iniciarCompartir(ajustes?.nombreUsuaria)
@@ -35,88 +35,61 @@ export default function App() {
     return () => detenerCompartir()
   }, [ajustes?.compartirEnVivo, ajustes?.nombreUsuaria])
 
-  // Vista para la persona de confianza (no es la app principal).
   if (paramSeguir) {
     return <div className="app"><Seguir dispositivo={paramSeguir} /></div>
   }
 
   function actualizarAjustes(nuevos) {
     setDatos(guardar({ ajustes: { ...ajustes, ...nuevos } }))
-    setPantalla('home')
+    setSub(null)
   }
+  function guardarLugar(lugar) { setDatos(guardar({ lugares: [...lugares, lugar] })) }
+  function eliminarLugar(id) { setDatos(guardar({ lugares: lugares.filter((l) => l.id !== id) })) }
 
-  function guardarLugar(lugar) {
-    setDatos(guardar({ lugares: [...lugares, lugar] }))
-  }
-
-  function eliminarLugar(id) {
-    setDatos(guardar({ lugares: lugares.filter((l) => l.id !== id) }))
-  }
-
-  function irADestino(lugar) {
-    setDestino(lugar)
-    setPantalla('mapa')
-  }
+  function irADestino(lugar) { setDestino(lugar); setSub('ruta') }
 
   function irACasa() {
     if (ajustes?.casa) {
-      irADestino({ nombre: 'casa', icono: '🏠', lat: ajustes.casa.lat, lng: ajustes.casa.lng })
+      irADestino({ nombre: 'casa', icono: 'casa', lat: ajustes.casa.lat, lng: ajustes.casa.lng })
     } else {
-      setAvisoCasa(true)
-      setPantalla('ajustes')
+      setSub('ajustes')
     }
   }
 
-  const mostrarSOS = pantalla === 'home' || pantalla === 'lugares'
+  function cambiarTab(t) { setSub(null); setTab(t) }
 
+  // Sub-pantallas enfocadas (sin barra ni SOS).
+  if (sub === 'ruta' && destino) {
+    return <div className="app"><Mapa destino={destino} onVolver={() => setSub(null)} /></div>
+  }
+  if (sub === 'perdida') {
+    return <div className="app"><Perdida ajustes={ajustes} lugares={lugares} onVolver={() => setSub(null)} onCasa={irACasa} /></div>
+  }
+  if (sub === 'ajustes') {
+    return <div className="app"><Ajustes ajustes={ajustes} onGuardar={actualizarAjustes} onVolver={() => setSub(null)} /></div>
+  }
+
+  // Pantallas principales (con barra inferior + SOS).
   return (
     <div className="app">
-      {pantalla === 'home' && (
+      {tab === 'inicio' && (
         <Home
           ajustes={ajustes}
-          compartiendo={Boolean(ajustes?.compartirEnVivo)}
           onCasa={irACasa}
-          onPerdida={() => setPantalla('perdida')}
-          onLugares={() => setPantalla('lugares')}
-          onAjustes={() => setPantalla('ajustes')}
+          onPerdida={() => setSub('perdida')}
+          onExplorar={() => cambiarTab('mapa')}
+          onAjustes={() => setSub('ajustes')}
         />
       )}
-
-      {pantalla === 'lugares' && (
-        <Lugares
-          lugares={lugares}
-          onIr={irADestino}
-          onGuardar={guardarLugar}
-          onEliminar={eliminarLugar}
-          onVolver={() => setPantalla('home')}
-        />
+      {tab === 'mapa' && (
+        <Explorar onIrARuta={irADestino} onGuardarLugar={guardarLugar} />
+      )}
+      {tab === 'lugares' && (
+        <Lugares lugares={lugares} onIr={irADestino} onGuardar={guardarLugar} onEliminar={eliminarLugar} />
       )}
 
-      {pantalla === 'mapa' && destino && (
-        <Mapa destino={destino} ajustes={ajustes} onVolver={() => setPantalla('home')} />
-      )}
-
-      {pantalla === 'perdida' && (
-        <Perdida
-          ajustes={ajustes}
-          lugares={lugares}
-          onVolver={() => setPantalla('home')}
-          onCasa={irACasa}
-        />
-      )}
-
-      {pantalla === 'ajustes' && (
-        <>
-          {avisoCasa && (
-            <div className="contenido" style={{ paddingBottom: 0 }}>
-              <div className="aviso">Primero guarda dónde está tu casa 🏠 para poder llevarte con un toque.</div>
-            </div>
-          )}
-          <Ajustes ajustes={ajustes} onGuardar={actualizarAjustes} onVolver={() => { setAvisoCasa(false); setPantalla('home') }} />
-        </>
-      )}
-
-      {mostrarSOS && <BotonSOS ajustes={ajustes} />}
+      <BotonSOS ajustes={ajustes} />
+      <BarraNav activa={tab} onCambiar={cambiarTab} />
     </div>
   )
 }
