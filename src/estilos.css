@@ -1,62 +1,62 @@
 /* ============================================================
-   Contigo — sistema de diseño
-   Paleta protagonista: CELESTE y CALIPSO (sus colores favoritos),
-   con dorado del circo como acento cálido. El rojo se reserva SOLO
-   para el botón SOS, para que resalte por seguridad.
-   Inspiración: circo, taekwondo, cueca y manualidades.
-   Prioridad: accesibilidad. Letra grande, alto contraste, botones enormes.
+   Contigo — sistema de diseño (minimalista y suave)
+   Calipso tenue como color principal, mucho aire, líneas finas,
+   sombras muy suaves. Toques cálidos discretos. El rojo se reserva
+   solo para el botón de ayuda (SOS). Accesible: texto grande y claro.
    ============================================================ */
 
 :root {
-  /* Celeste y calipso (favoritos de ella) */
-  --celeste: #4cc4e6;
-  --celeste-osc: #2ba0d6;
-  --celeste-claro: #bfeaf5;
-  --calipso: #12a3a8;
-  --calipso-osc: #0c7e82;
+  /* Calipso suave (principal) */
+  --calipso: #4bb0ac;
+  --calipso-osc: #2f8f8b;
+  --calipso-tenue: #e7f4f3;
 
-  /* Acentos cálidos de circo */
-  --dorado: #f4b63f;
-  --dorado-osc: #dd9a1f;
-  --coral: #ff7a6b;
-  --verde-calma: #26b39c;
-  --verde-calma-osc: #1c8f7f;
+  /* Celeste (favorito) */
+  --celeste: #86cfe0;
+  --celeste-osc: #4aa9c4;
+  --celeste-tenue: #e8f4f9;
 
-  /* Rojo SOLO para el SOS */
-  --rojo-sos: #e23b52;
-  --rojo-sos-osc: #b81f38;
+  /* Acento cálido discreto */
+  --arena: #e6b877;
+  --arena-tenue: #f7efdf;
 
-  /* Neutros suaves con tinte celeste */
-  --crema: #f1fbfd;
+  /* Calma (para "me siento perdida") */
+  --verde: #63b89c;
+  --verde-tenue: #e5f2ec;
+
+  /* Rojo SOLO para ayuda/SOS */
+  --rojo-sos: #e0576b;
+  --rojo-sos-osc: #c53d52;
+
+  /* Neutros */
+  --fondo: #f7fafa;
   --papel: #ffffff;
-  --tinta: #1f3a42;
-  --tinta-suave: #5a7681;
+  --linea: #ecf1f1;
+  --tinta: #26383c;
+  --tinta-suave: #6f8286;
 
-  --sombra: 0 6px 0 rgba(12, 58, 66, 0.14);
-  --sombra-suave: 0 8px 24px rgba(18, 74, 82, 0.16);
-  --radio: 26px;
+  --sombra: 0 4px 16px rgba(38, 53, 57, 0.06);
+  --sombra-fuerte: 0 10px 30px rgba(38, 53, 57, 0.10);
+  --radio: 20px;
+  --radio-sm: 14px;
 
   --fuente: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
 html, body, #root { height: 100%; margin: 0; }
 
 body {
   font-family: var(--fuente);
   color: var(--tinta);
-  background-color: var(--crema);
-  /* Textura suave celeste/calipso */
-  background-image:
-    radial-gradient(circle at 15% 0%, rgba(76, 196, 230, 0.16), transparent 42%),
-    radial-gradient(circle at 92% 8%, rgba(18, 163, 168, 0.14), transparent 42%);
+  background-color: var(--fondo);
   -webkit-font-smoothing: antialiased;
   overscroll-behavior: none;
+  letter-spacing: 0.1px;
 }
 
 .app {
-  max-width: 560px;
+  max-width: 520px;
   margin: 0 auto;
   min-height: 100%;
   display: flex;
@@ -66,170 +66,177 @@ body {
 
 .contenido {
   flex: 1;
-  padding: 18px 18px 28px;
+  padding: 8px 20px 28px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
 }
 
 /* ---------- Encabezado ---------- */
 .encabezado {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
-  padding: 16px 18px 4px;
+  padding: 26px 20px 6px;
 }
-.saludo { margin: 0; font-size: 1.55rem; line-height: 1.2; font-weight: 800; }
-.saludo .nombre { color: var(--celeste-osc); }
-.subsaludo { margin: 4px 0 0; color: var(--tinta-suave); font-size: 1.05rem; }
+.saludo { margin: 0; font-size: 1.7rem; line-height: 1.15; font-weight: 700; letter-spacing: -0.3px; }
+.saludo .nombre { color: var(--calipso-osc); }
+.subsaludo { margin: 8px 0 0; color: var(--tinta-suave); font-size: 1.02rem; min-height: 1.3em; transition: opacity .4s ease; }
 
-/* Cintas de circo decorativas (en celeste/calipso) */
-.cinta-circo {
-  height: 12px;
-  background: repeating-linear-gradient(
-    -45deg, var(--celeste) 0 18px, var(--calipso) 18px 36px
-  );
-  opacity: 0.9;
+.icono-btn {
+  flex: none; width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid var(--linea); background: var(--papel); color: var(--tinta-suave);
+  font-size: 1.15rem; cursor: pointer; box-shadow: var(--sombra);
+  display: flex; align-items: center; justify-content: center;
 }
+.icono-btn:active { transform: scale(0.95); }
 
-/* ---------- Botón grande ---------- */
-.boton-grande {
-  border: none;
-  width: 100%;
-  border-radius: var(--radio);
-  padding: 26px 22px;
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  text-align: left;
-  cursor: pointer;
+/* Píldora de estado (compartiendo ubicación) */
+.pill-estado {
+  align-self: flex-start;
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--calipso-tenue); color: var(--calipso-osc);
+  border-radius: 999px; padding: 8px 14px; font-size: 0.92rem; font-weight: 600;
+  cursor: pointer; margin: 0 20px;
+}
+.punto-vivo { width: 9px; height: 9px; border-radius: 50%; background: var(--calipso); animation: pulso 1.8s ease-in-out infinite; }
+@keyframes pulso { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(1.4)} }
+
+/* ---------- Tarjeta-botón (acciones principales) ---------- */
+.tarjeta-boton {
+  display: flex; align-items: center; gap: 16px;
+  width: 100%; text-align: left; cursor: pointer;
+  background: var(--papel); border: 1px solid var(--linea);
+  border-radius: var(--radio); padding: 18px;
   box-shadow: var(--sombra);
-  transition: transform 0.08s ease, filter 0.12s ease;
-  line-height: 1.15;
+  transition: transform .1s ease, box-shadow .15s ease;
 }
-.boton-grande:active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(12,58,66,0.14); }
-.boton-grande .emoji { font-size: 2.4rem; line-height: 1; }
-.boton-grande small { display: block; font-size: 0.95rem; font-weight: 600; opacity: 0.92; margin-top: 4px; }
+.tarjeta-boton:active { transform: scale(0.99); box-shadow: var(--sombra-fuerte); }
+.tarjeta-boton .badge {
+  flex: none; width: 54px; height: 54px; border-radius: var(--radio-sm);
+  display: flex; align-items: center; justify-content: center; font-size: 1.6rem;
+}
+.badge.celeste { background: var(--celeste-tenue); }
+.badge.calipso { background: var(--calipso-tenue); }
+.badge.arena { background: var(--arena-tenue); }
+.tarjeta-boton .txt { flex: 1; min-width: 0; }
+.tarjeta-boton .txt .t { font-size: 1.22rem; font-weight: 700; margin: 0; }
+.tarjeta-boton .txt .s { font-size: 0.95rem; color: var(--tinta-suave); margin: 3px 0 0; }
+.tarjeta-boton .chevron { color: #c3d0d1; font-size: 1.5rem; margin-left: 4px; }
 
-.boton-grande.casa { background: linear-gradient(135deg, var(--celeste), var(--celeste-osc)); }
-.boton-grande.perdida { background: linear-gradient(135deg, var(--verde-calma), var(--calipso-osc)); }
-.boton-grande.lugares { background: linear-gradient(135deg, var(--dorado), var(--dorado-osc)); color: var(--tinta); }
-.boton-grande.lugares small { opacity: 0.78; }
-
-/* ---------- Barra / botón SOS (rojo, por seguridad) ---------- */
+/* ---------- Botón SOS (rojo, sobrio) ---------- */
 .sos-barra {
-  position: sticky;
-  bottom: 0;
-  padding: 12px 18px calc(12px + env(safe-area-inset-bottom));
-  background: linear-gradient(to top, var(--crema) 70%, transparent);
+  position: sticky; bottom: 0;
+  padding: 14px 20px calc(16px + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--fondo) 72%, transparent);
 }
 .boton-sos {
-  width: 100%;
-  border: 4px solid #fff;
-  border-radius: 22px;
-  padding: 20px;
-  font-size: 1.35rem;
-  font-weight: 900;
-  letter-spacing: 0.5px;
-  color: #fff;
-  background: linear-gradient(135deg, var(--rojo-sos), var(--rojo-sos-osc));
-  box-shadow: var(--sombra-suave);
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 12px;
-  animation: latido 2.6s ease-in-out infinite;
+  width: 100%; border: none; border-radius: 16px; padding: 18px;
+  font-size: 1.18rem; font-weight: 700; color: #fff;
+  background: var(--rojo-sos); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  box-shadow: 0 6px 20px rgba(224, 87, 107, 0.28);
 }
-.boton-sos:active { transform: scale(0.98); }
-@keyframes latido {
-  0%, 100% { box-shadow: 0 8px 24px rgba(226, 59, 82, 0.35); }
-  50% { box-shadow: 0 8px 34px rgba(226, 59, 82, 0.6); }
-}
+.boton-sos:active { transform: scale(0.99); background: var(--rojo-sos-osc); }
 
-/* ---------- Tarjetas (lugares) ---------- */
+/* ---------- Tarjetas ---------- */
 .tarjeta {
-  background: var(--papel);
-  border-radius: var(--radio);
-  padding: 18px;
-  box-shadow: var(--sombra-suave);
-  border: 2px dashed rgba(18, 163, 168, 0.22); /* costura tipo manualidad */
+  background: var(--papel); border: 1px solid var(--linea);
+  border-radius: var(--radio); padding: 18px; box-shadow: var(--sombra);
 }
 .lugar {
-  display: flex; align-items: center; gap: 16px;
-  width: 100%; border: none; background: var(--papel);
-  border-radius: 20px; padding: 18px; margin-bottom: 12px;
-  box-shadow: var(--sombra-suave); cursor: pointer; text-align: left;
+  display: flex; align-items: center; gap: 14px;
+  width: 100%; border: 1px solid var(--linea); background: var(--papel);
+  border-radius: var(--radio); padding: 16px; margin-bottom: 10px;
+  box-shadow: var(--sombra); cursor: pointer; text-align: left;
 }
-.lugar:active { transform: translateY(2px); }
-.lugar .icono { font-size: 2.2rem; }
-.lugar .nombre { font-size: 1.25rem; font-weight: 800; margin: 0; }
-.lugar .detalle { color: var(--tinta-suave); font-size: 0.95rem; margin: 2px 0 0; }
+.lugar:active { transform: scale(0.99); }
+.lugar .icono {
+  flex: none; width: 48px; height: 48px; border-radius: var(--radio-sm);
+  background: var(--calipso-tenue); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+}
+.lugar .nombre { font-size: 1.15rem; font-weight: 700; margin: 0; }
+.lugar .detalle { color: var(--tinta-suave); font-size: 0.9rem; margin: 2px 0 0; }
 
-/* ---------- Botones secundarios ---------- */
+/* ---------- Botones ---------- */
 .boton {
-  border: none; border-radius: 18px; padding: 16px 20px;
-  font-size: 1.1rem; font-weight: 800; cursor: pointer;
-  box-shadow: var(--sombra); display: inline-flex; align-items: center; gap: 10px;
-  justify-content: center;
+  border: none; border-radius: 14px; padding: 15px 18px;
+  font-size: 1.05rem; font-weight: 700; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 9px; justify-content: center;
+  transition: transform .1s ease;
 }
-.boton:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(12,58,66,0.14); }
-.boton.principal { background: var(--calipso); color: #fff; }
-.boton.dorado { background: var(--dorado); color: var(--tinta); }
-.boton.suave { background: #fff; color: var(--tinta); box-shadow: var(--sombra-suave); }
+.boton:active { transform: scale(0.98); }
+.boton.principal { background: var(--calipso); color: #fff; box-shadow: 0 5px 16px rgba(75,176,172,0.25); }
+.boton.celeste { background: var(--celeste-osc); color: #fff; }
+.boton.dorado { background: var(--arena); color: #4a3a1a; }
+.boton.suave { background: var(--papel); color: var(--tinta); border: 1px solid var(--linea); box-shadow: var(--sombra); }
 .boton.bloque { width: 100%; }
 
 .volver {
-  background: none; border: none; font-size: 1.1rem; font-weight: 800;
-  color: var(--celeste-osc); cursor: pointer; padding: 8px 0; display: inline-flex;
-  align-items: center; gap: 8px;
+  background: none; border: none; font-size: 1.02rem; font-weight: 600;
+  color: var(--calipso-osc); cursor: pointer; padding: 6px 0; display: inline-flex;
+  align-items: center; gap: 6px;
 }
+.titulo-pantalla { font-size: 1.5rem; font-weight: 700; margin: 2px 0 0; letter-spacing: -0.2px; }
 
-.titulo-pantalla { font-size: 1.6rem; font-weight: 900; margin: 4px 0 0; }
+/* ---------- Interruptor (toggle) ---------- */
+.fila-toggle { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.fila-toggle .t { font-weight: 700; font-size: 1.05rem; }
+.fila-toggle .s { color: var(--tinta-suave); font-size: 0.9rem; margin-top: 3px; }
+.toggle {
+  flex: none; width: 56px; height: 32px; border-radius: 999px; border: none;
+  background: #d7e0e0; cursor: pointer; position: relative; transition: background .2s ease;
+}
+.toggle.on { background: var(--calipso); }
+.toggle::after {
+  content: ''; position: absolute; top: 3px; left: 3px; width: 26px; height: 26px;
+  border-radius: 50%; background: #fff; transition: transform .2s ease; box-shadow: 0 1px 3px rgba(0,0,0,.2);
+}
+.toggle.on::after { transform: translateX(24px); }
 
 /* ---------- Formularios ---------- */
-label { display: block; font-weight: 800; margin: 14px 0 6px; }
+label { display: block; font-weight: 700; margin: 14px 0 6px; font-size: 0.98rem; }
 input, textarea {
-  width: 100%; border: 3px solid #d3ecf3; border-radius: 16px;
-  padding: 14px 16px; font-size: 1.15rem; font-family: var(--fuente);
-  background: #fff; color: var(--tinta);
+  width: 100%; border: 1px solid #dde6e6; border-radius: var(--radio-sm);
+  padding: 14px 15px; font-size: 1.08rem; font-family: var(--fuente);
+  background: #fbfdfd; color: var(--tinta);
 }
-input:focus, textarea:focus { outline: none; border-color: var(--celeste-osc); }
+input:focus, textarea:focus { outline: none; border-color: var(--calipso); background: #fff; }
 
 /* ---------- Mapa ---------- */
-.mapa-caja { border-radius: var(--radio); overflow: hidden; box-shadow: var(--sombra-suave); }
+.mapa-caja { border-radius: var(--radio); overflow: hidden; box-shadow: var(--sombra); border: 1px solid var(--linea); }
 .leaflet-container { height: 46vh; min-height: 300px; width: 100%; }
 .panel-ruta {
-  background: var(--papel); border-radius: var(--radio); padding: 18px;
-  box-shadow: var(--sombra-suave); display: flex; flex-direction: column; gap: 12px;
+  background: var(--papel); border: 1px solid var(--linea); border-radius: var(--radio);
+  padding: 18px; box-shadow: var(--sombra); display: flex; flex-direction: column; gap: 12px;
 }
-.ruta-resumen { display: flex; gap: 18px; font-size: 1.15rem; font-weight: 800; }
-.ruta-resumen .dato { display: flex; align-items: center; gap: 8px; }
+.ruta-resumen { display: flex; gap: 20px; font-size: 1.1rem; font-weight: 700; }
+.ruta-resumen .dato { display: flex; align-items: center; gap: 7px; }
 
-/* ---------- Chat IA (Me siento perdida) ---------- */
+/* ---------- Chat (Me siento perdida) ---------- */
 .chat { flex: 1; display: flex; flex-direction: column; gap: 12px; }
-.mensajes { flex: 1; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; padding-bottom: 8px; }
-.burbuja { max-width: 85%; padding: 16px 18px; border-radius: 22px; font-size: 1.2rem; line-height: 1.35; }
-.burbuja.ia { background: #fff; color: var(--tinta); box-shadow: var(--sombra-suave); border-bottom-left-radius: 6px; align-self: flex-start; }
-.burbuja.yo { background: var(--celeste-osc); color: #fff; border-bottom-right-radius: 6px; align-self: flex-end; }
+.mensajes { flex: 1; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; padding-bottom: 8px; }
+.burbuja { max-width: 84%; padding: 15px 17px; border-radius: 20px; font-size: 1.12rem; line-height: 1.4; }
+.burbuja.ia { background: var(--papel); border: 1px solid var(--linea); color: var(--tinta); border-bottom-left-radius: 6px; align-self: flex-start; box-shadow: var(--sombra); }
+.burbuja.yo { background: var(--calipso); color: #fff; border-bottom-right-radius: 6px; align-self: flex-end; }
 .chat-entrada { display: flex; gap: 10px; align-items: flex-end; }
-.chat-entrada textarea { resize: none; height: 56px; }
+.chat-entrada textarea { resize: none; height: 54px; }
 .boton-voz {
-  flex: none; width: 62px; height: 62px; border-radius: 50%; border: none;
-  background: var(--calipso); color: #fff; font-size: 1.6rem; cursor: pointer;
-  box-shadow: var(--sombra-suave);
+  flex: none; width: 58px; height: 58px; border-radius: 50%; border: none;
+  background: var(--calipso); color: #fff; font-size: 1.5rem; cursor: pointer;
+  box-shadow: 0 5px 16px rgba(75,176,172,0.3);
 }
-.boton-voz.escuchando { animation: latido 1s ease-in-out infinite; background: var(--calipso-osc); }
+.boton-voz.escuchando { animation: pulso 1s ease-in-out infinite; background: var(--calipso-osc); }
 
 /* ---------- Utilidades ---------- */
 .centrado { text-align: center; }
-.aviso { background: #e6f7fb; border-radius: 16px; padding: 14px 16px; font-size: 1rem; color: #0c5b66; }
-.error { background: #ffe0e4; color: #a01528; border-radius: 16px; padding: 14px 16px; }
-.cargando { text-align: center; color: var(--tinta-suave); font-size: 1.1rem; padding: 18px; }
-.chip-fila { display: flex; flex-wrap: wrap; gap: 10px; }
+.aviso { background: var(--celeste-tenue); border-radius: var(--radio-sm); padding: 13px 15px; font-size: 0.98rem; color: #205e70; }
+.error { background: #fdeaed; color: #a32036; border-radius: var(--radio-sm); padding: 13px 15px; }
+.cargando { text-align: center; color: var(--tinta-suave); font-size: 1.05rem; padding: 18px; }
+.chip-fila { display: flex; flex-wrap: wrap; gap: 9px; }
 .chip {
-  background: #fff; border: 2px solid #d3ecf3; border-radius: 999px;
-  padding: 10px 16px; font-size: 1rem; font-weight: 700; cursor: pointer;
+  background: var(--papel); border: 1px solid var(--linea); border-radius: 999px;
+  padding: 9px 15px; font-size: 0.98rem; font-weight: 600; cursor: pointer; color: var(--tinta);
 }
-.pie-firma { text-align: center; color: var(--tinta-suave); font-size: 0.85rem; padding: 8px 0 16px; }
+.pie-firma { text-align: center; color: #a9b8ba; font-size: 0.82rem; padding: 10px 0 4px; }

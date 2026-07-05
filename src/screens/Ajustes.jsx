@@ -1,11 +1,15 @@
 import { useState } from 'react'
 import { ubicacionActual } from '../lib/ubicacion.js'
 import { buscarLugar } from '../lib/rutas.js'
+import { idDispositivo } from '../lib/almacenamiento.js'
+import { urlWhatsappSeguir } from '../lib/ubicacionVivo.js'
+import { HAY_SUPABASE } from '../lib/config.js'
 
 export default function Ajustes({ ajustes, onGuardar, onVolver }) {
   const [nombre, setNombre] = useState(ajustes?.nombreUsuaria || '')
   const [whatsapp, setWhatsapp] = useState(ajustes?.whatsappContacto || '')
   const [casa, setCasa] = useState(ajustes?.casa || null)
+  const [compartirEnVivo, setCompartirEnVivo] = useState(Boolean(ajustes?.compartirEnVivo))
   const [busqueda, setBusqueda] = useState('')
   const [resultados, setResultados] = useState([])
   const [estado, setEstado] = useState('')
@@ -35,7 +39,8 @@ export default function Ajustes({ ajustes, onGuardar, onVolver }) {
     onGuardar({
       nombreUsuaria: nombre.trim(),
       whatsappContacto: whatsapp.replace(/[^0-9]/g, ''),
-      casa
+      casa,
+      compartirEnVivo
     })
     setGuardado(true)
     setTimeout(() => setGuardado(false), 2500)
@@ -80,7 +85,34 @@ export default function Ajustes({ ajustes, onGuardar, onVolver }) {
         ))}
       </div>
 
-      <button className="boton principal bloque" onClick={guardar}>Guardar cambios 💚</button>
+      <div className="tarjeta">
+        <div className="fila-toggle">
+          <div>
+            <div className="t">📍 Compartir mi ubicación en vivo</div>
+            <div className="s">Tu persona de confianza puede verte en tiempo real mientras usas la app.</div>
+          </div>
+          <button
+            className={`toggle ${compartirEnVivo ? 'on' : ''}`}
+            aria-label="Compartir ubicación en vivo"
+            aria-pressed={compartirEnVivo}
+            onClick={() => setCompartirEnVivo((v) => !v)}
+          />
+        </div>
+        {!HAY_SUPABASE && (
+          <div className="aviso" style={{ marginTop: 12 }}>Para el seguimiento en vivo hay que configurar la base de datos (Supabase). Ver el README.</div>
+        )}
+        <a
+          className="boton celeste bloque"
+          style={{ marginTop: 14, textDecoration: 'none' }}
+          href={urlWhatsappSeguir(idDispositivo(), whatsapp, nombre)}
+          target="_blank" rel="noreferrer"
+        >
+          📤 Enviarme el enlace para seguirla
+        </a>
+        <p className="detalle" style={{ color: '#6f8286', marginTop: 8 }}>Recuerda tocar “Guardar” para activar el cambio.</p>
+      </div>
+
+      <button className="boton principal bloque" onClick={guardar}>Guardar cambios 💗</button>
       {guardado && <div className="aviso centrado">✅ Guardado</div>}
     </div>
   )

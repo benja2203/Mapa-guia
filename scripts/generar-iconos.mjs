@@ -36,8 +36,8 @@ function mezclar(a, b, t) { return Math.round(a + (b - a) * t) }
 
 function dibujar(tam) {
   const px = Buffer.alloc(tam * tam * 4)
-  const celeste = [76, 196, 230]
-  const calipso = [12, 126, 130]
+  const celeste = [134, 207, 224]
+  const calipso = [75, 176, 172]
   for (let y = 0; y < tam; y++) {
     for (let x = 0; x < tam; x++) {
       // Fondo con degradado diagonal celeste -> calipso.

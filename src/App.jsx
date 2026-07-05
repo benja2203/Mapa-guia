@@ -4,8 +4,13 @@ import Lugares from './screens/Lugares.jsx'
 import Mapa from './screens/Mapa.jsx'
 import Perdida from './screens/Perdida.jsx'
 import Ajustes from './screens/Ajustes.jsx'
+import Seguir from './screens/Seguir.jsx'
 import BotonSOS from './components/BotonSOS.jsx'
 import { leerLocal, sincronizarDesdeNube, guardar } from './lib/almacenamiento.js'
+import { iniciarCompartir, detenerCompartir } from './lib/ubicacionVivo.js'
+
+// ¿Se abrió con el enlace de seguimiento? (?seguir=DISPOSITIVO)
+const paramSeguir = new URLSearchParams(window.location.search).get('seguir')
 
 export default function App() {
   const [datos, setDatos] = useState(() => leerLocal())
@@ -15,11 +20,25 @@ export default function App() {
 
   // Sincronizar con la nube al abrir (si Supabase está configurado).
   useEffect(() => {
+    if (paramSeguir) return
     sincronizarDesdeNube().then((remoto) => { if (remoto) setDatos(remoto) })
   }, [])
 
   const ajustes = datos.ajustes
   const lugares = datos.lugares || []
+
+  // Compartir ubicación en vivo mientras la opción esté activada.
+  useEffect(() => {
+    if (paramSeguir) return
+    if (ajustes?.compartirEnVivo) iniciarCompartir(ajustes?.nombreUsuaria)
+    else detenerCompartir()
+    return () => detenerCompartir()
+  }, [ajustes?.compartirEnVivo, ajustes?.nombreUsuaria])
+
+  // Vista para la persona de confianza (no es la app principal).
+  if (paramSeguir) {
+    return <div className="app"><Seguir dispositivo={paramSeguir} /></div>
+  }
 
   function actualizarAjustes(nuevos) {
     setDatos(guardar({ ajustes: { ...ajustes, ...nuevos } }))
@@ -43,7 +62,6 @@ export default function App() {
     if (ajustes?.casa) {
       irADestino({ nombre: 'casa', icono: '🏠', lat: ajustes.casa.lat, lng: ajustes.casa.lng })
     } else {
-      // Aún no hay casa guardada: llevar a Ajustes con un aviso amable.
       setAvisoCasa(true)
       setPantalla('ajustes')
     }
@@ -56,6 +74,7 @@ export default function App() {
       {pantalla === 'home' && (
         <Home
           ajustes={ajustes}
+          compartiendo={Boolean(ajustes?.compartirEnVivo)}
           onCasa={irACasa}
           onPerdida={() => setPantalla('perdida')}
           onLugares={() => setPantalla('lugares')}

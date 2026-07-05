@@ -11,5 +11,6 @@ export const HAY_ORS = Boolean(ORS_API_KEY)
 export const AJUSTES_DEFECTO = {
   nombreUsuaria: '',
   casa: null, // { lat, lng, direccion }
-  whatsappContacto: CONTACTO_WHATSAPP
+  whatsappContacto: CONTACTO_WHATSAPP,
+  compartirEnVivo: false // compartir ubicación en tiempo real con la persona de confianza
 }

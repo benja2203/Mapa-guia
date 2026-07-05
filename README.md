@@ -14,6 +14,8 @@ Inspirada en sus gustos: **taekwondo 🥋, circo 🎪, cueca 💃 y manualidades
 - 🚌 **¿Cómo llego en micro/metro?** — abre la ruta en transporte público (Google Maps).
 - 🔊 **Voz** — le habla en voz alta y ella puede **hablarle** en vez de escribir.
 - 🆘 **SOS** — comparte su ubicación con la persona de confianza por WhatsApp.
+- 🔵 **Ubicación en vivo** — con un enlace, la persona de confianza la ve en **tiempo real**
+  mientras ella tiene la app abierta (opcional, se activa en Ajustes).
 - ☁️ Sus datos se guardan en el **teléfono y en la nube** (no pierde nada) y es **instalable** como app.
 
 ## Tecnología (todo gratis o de costo mínimo)
@@ -51,7 +53,26 @@ create table if not exists datos (
 alter table datos enable row level security;
 create policy "acceso anon" on datos for all
   using (true) with check (true);
+
+-- Para la ubicación en vivo (seguimiento en tiempo real):
+create table if not exists ubicaciones (
+  dispositivo text primary key,
+  nombre text,
+  lat float8,
+  lng float8,
+  precision float8,
+  actualizado timestamptz
+);
+alter table ubicaciones enable row level security;
+create policy "acceso anon ubic" on ubicaciones for all
+  using (true) with check (true);
 ```
+
+### Ubicación en vivo (cómo funciona)
+- En **Ajustes** ella activa “Compartir mi ubicación en vivo” y toca **Guardar**.
+- Con el botón “Enviarme el enlace para seguirla” te llega por WhatsApp un enlace tipo
+  `https://tuapp.vercel.app/?seguir=SU_ID`. Al abrirlo ves su ubicación en un mapa que se
+  **actualiza solo** mientras ella tenga la app abierta.
 > Nota: esta política es abierta para simplicidad de un uso personal. Si más adelante quieres
 > más seguridad, se puede agregar login.
 
