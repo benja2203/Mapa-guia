@@ -1,6 +1,9 @@
 // Backend seguro (función serverless de Vercel).
-// Recibe la conversación y el contexto, y responde con Claude usando un tono cálido.
-// La API key vive SOLO aquí (variable de entorno), nunca en el teléfono.
+// Recibe la conversación y el contexto, y responde con Gemini (Google) usando un tono cálido.
+// La API key de Gemini vive SOLO aquí (variable de entorno), nunca en el teléfono.
+// Gemini tiene una capa GRATIS: consigue tu clave en https://aistudio.google.com/app/apikey
+
+const MODELO = process.env.GEMINI_MODEL || 'gemini-2.0-flash'
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -8,9 +11,9 @@ export default async function handler(req, res) {
     return
   }
 
-  const apiKey = process.env.ANTHROPIC_API_KEY
+  const apiKey = process.env.GEMINI_API_KEY
   if (!apiKey) {
-    res.status(500).json({ error: 'Falta configurar ANTHROPIC_API_KEY' })
+    res.status(500).json({ error: 'Falta configurar GEMINI_API_KEY' })
     return
   }
 
@@ -42,41 +45,37 @@ export default async function handler(req, res) {
       `CONTEXTO: ${ubic} ${casa} ${lugares}`
     ].join('\n')
 
-    const messages = mensajes.map((m) => ({
-      role: m.de === 'yo' ? 'user' : 'assistant',
-      content: m.texto
+    // Gemini usa roles "user" y "model".
+    const contents = mensajes.map((m) => ({
+      role: m.de === 'yo' ? 'user' : 'model',
+      parts: [{ text: m.texto }]
     }))
-    // Aseguramos que la conversación empiece con el usuario.
-    if (messages.length === 0 || messages[0].role !== 'user') {
-      messages.unshift({ role: 'user', content: 'Me siento perdida.' })
+    if (contents.length === 0 || contents[0].role !== 'user') {
+      contents.unshift({ role: 'user', parts: [{ text: 'Me siento perdida.' }] })
     }
 
-    const r = await fetch('https://api.anthropic.com/v1/messages', {
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${MODELO}:generateContent?key=${apiKey}`
+    const r = await fetch(url, {
       method: 'POST',
-      headers: {
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'content-type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 300,
-        system,
-        messages
+        system_instruction: { parts: [{ text: system }] },
+        contents,
+        generationConfig: { maxOutputTokens: 300, temperature: 0.85 }
       })
     })
 
     if (!r.ok) {
       const detalle = await r.text()
-      console.error('Error de Anthropic:', detalle)
+      console.error('Error de Gemini:', detalle)
       res.status(502).json({ error: 'La compañera no está disponible ahora' })
       return
     }
 
     const data = await r.json()
-    const respuesta = (data.content || [])
-      .filter((b) => b.type === 'text')
-      .map((b) => b.text)
+    const respuesta = (data.candidates?.[0]?.content?.parts || [])
+      .map((p) => p.text)
+      .filter(Boolean)
       .join('\n')
       .trim()
 

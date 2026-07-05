@@ -19,7 +19,7 @@ Inspirada en sus gustos: **taekwondo 🥋, circo 🎪, cueca 💃 y manualidades
 ## Tecnología (todo gratis o de costo mínimo)
 - **PWA** con **React + Vite** (instalable en Android).
 - Mapa: **Leaflet + OpenStreetMap**. Rutas a pie: **OpenRouteService** (plan gratis).
-- IA: **Claude (Haiku)** vía un backend seguro (`api/asistente.js`). Costo: centavos al mes.
+- IA: **Gemini (Google)** vía un backend seguro (`api/asistente.js`). Tiene **capa gratis**.
 - Voz: **Web Speech API** del navegador. Base de datos: **Supabase** (plan gratis).
 
 ## Puesta en marcha (desarrollo)
@@ -34,7 +34,7 @@ La app funciona aunque dejes las claves vacías:
 - **Sin backend de IA** (en `npm run dev` no corre `api/`): usa respuestas cálidas de reserva.
 
 ## Claves (todas con plan gratis o de centavos)
-1. **Anthropic (IA)** — https://console.anthropic.com → `ANTHROPIC_API_KEY` (solo en el backend).
+1. **Gemini (IA, gratis)** — https://aistudio.google.com/app/apikey → `GEMINI_API_KEY` (solo en el backend).
 2. **OpenRouteService (rutas a pie)** — https://openrouteservice.org/dev/#/signup → `VITE_ORS_API_KEY`.
 3. **Supabase (base de datos)** — https://supabase.com → `VITE_SUPABASE_URL` y `VITE_SUPABASE_ANON_KEY`.
 4. **WhatsApp del contacto (SOS)** — `VITE_CONTACTO_WHATSAPP` (ej. Chile: `56912345678`).

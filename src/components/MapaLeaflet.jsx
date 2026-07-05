@@ -12,8 +12,8 @@ function iconoEmoji(emoji, color) {
   })
 }
 
-const iconoYo = iconoEmoji('🧍', '#17a2a2')
-const iconoDestino = iconoEmoji('📍', '#e23b52')
+const iconoYo = iconoEmoji('🧍', '#12a3a8')
+const iconoDestino = iconoEmoji('📍', '#ff7a6b')
 
 // Ajusta la vista para que se vean todos los puntos importantes.
 function AjustarVista({ yo, destino, ruta }) {
@@ -44,7 +44,7 @@ export default function MapaLeaflet({ yo, destino, ruta }) {
         {yo && <Marker position={[yo.lat, yo.lng]} icon={iconoYo} />}
         {destino && <Marker position={[destino.lat, destino.lng]} icon={iconoDestino} />}
         {ruta && ruta.length > 0 && (
-          <Polyline positions={ruta} pathOptions={{ color: '#e23b52', weight: 7, opacity: 0.85 }} />
+          <Polyline positions={ruta} pathOptions={{ color: '#2ba0d6', weight: 7, opacity: 0.9 }} />
         )}
         <AjustarVista yo={yo} destino={destino} ruta={ruta} />
       </MapContainer>

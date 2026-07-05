@@ -1,5 +1,5 @@
 // Genera los íconos PNG de la PWA sin dependencias externas.
-// Un corazón blanco (💚 = "Contigo") sobre fondo rojo carpa de circo.
+// Un corazón blanco (💚 = "Contigo") sobre fondo celeste/calipso (sus colores).
 import { deflateSync } from 'node:zlib'
 import { writeFileSync, mkdirSync } from 'node:fs'
 import { dirname, join } from 'node:path'
@@ -36,15 +36,15 @@ function mezclar(a, b, t) { return Math.round(a + (b - a) * t) }
 
 function dibujar(tam) {
   const px = Buffer.alloc(tam * tam * 4)
-  const rojo = [226, 59, 82]
-  const rojoOsc = [184, 31, 56]
+  const celeste = [76, 196, 230]
+  const calipso = [12, 126, 130]
   for (let y = 0; y < tam; y++) {
     for (let x = 0; x < tam; x++) {
-      // Fondo con leve degradado diagonal.
+      // Fondo con degradado diagonal celeste -> calipso.
       const t = (x + y) / (2 * tam)
-      let r = mezclar(rojo[0], rojoOsc[0], t)
-      let g = mezclar(rojo[1], rojoOsc[1], t)
-      let b = mezclar(rojo[2], rojoOsc[2], t)
+      let r = mezclar(celeste[0], calipso[0], t)
+      let g = mezclar(celeste[1], calipso[1], t)
+      let b = mezclar(celeste[2], calipso[2], t)
 
       // Coordenadas normalizadas centradas para el corazón.
       const u = (x / tam - 0.5) * 2.6

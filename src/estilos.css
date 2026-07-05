@@ -1,25 +1,39 @@
 /* ============================================================
    Contigo — sistema de diseño
-   Inspirado en sus gustos: circo (colores festivos), manualidades
-   (texturas y bordes hechos a mano), taekwondo y cueca (detalles).
+   Paleta protagonista: CELESTE y CALIPSO (sus colores favoritos),
+   con dorado del circo como acento cálido. El rojo se reserva SOLO
+   para el botón SOS, para que resalte por seguridad.
+   Inspiración: circo, taekwondo, cueca y manualidades.
    Prioridad: accesibilidad. Letra grande, alto contraste, botones enormes.
    ============================================================ */
 
 :root {
-  /* Paleta circo + calidez */
-  --rojo-carpa: #e23b52;
-  --rojo-carpa-osc: #b81f38;
-  --dorado: #f2b134;
-  --turquesa: #17a2a2;
-  --turquesa-osc: #0e7d7d;
-  --crema: #fff8ef;
-  --papel: #fffdf9;
-  --tinta: #2b2320;
-  --tinta-suave: #6d5f56;
-  --verde-calma: #3ea672;
+  /* Celeste y calipso (favoritos de ella) */
+  --celeste: #4cc4e6;
+  --celeste-osc: #2ba0d6;
+  --celeste-claro: #bfeaf5;
+  --calipso: #12a3a8;
+  --calipso-osc: #0c7e82;
 
-  --sombra: 0 6px 0 rgba(0, 0, 0, 0.12);
-  --sombra-suave: 0 8px 24px rgba(43, 35, 32, 0.14);
+  /* Acentos cálidos de circo */
+  --dorado: #f4b63f;
+  --dorado-osc: #dd9a1f;
+  --coral: #ff7a6b;
+  --verde-calma: #26b39c;
+  --verde-calma-osc: #1c8f7f;
+
+  /* Rojo SOLO para el SOS */
+  --rojo-sos: #e23b52;
+  --rojo-sos-osc: #b81f38;
+
+  /* Neutros suaves con tinte celeste */
+  --crema: #f1fbfd;
+  --papel: #ffffff;
+  --tinta: #1f3a42;
+  --tinta-suave: #5a7681;
+
+  --sombra: 0 6px 0 rgba(12, 58, 66, 0.14);
+  --sombra-suave: 0 8px 24px rgba(18, 74, 82, 0.16);
   --radio: 26px;
 
   --fuente: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
@@ -33,10 +47,10 @@ body {
   font-family: var(--fuente);
   color: var(--tinta);
   background-color: var(--crema);
-  /* Textura suave tipo carpa de circo */
+  /* Textura suave celeste/calipso */
   background-image:
-    radial-gradient(circle at 20% 0%, rgba(242, 177, 52, 0.10), transparent 40%),
-    radial-gradient(circle at 90% 10%, rgba(23, 162, 162, 0.10), transparent 40%);
+    radial-gradient(circle at 15% 0%, rgba(76, 196, 230, 0.16), transparent 42%),
+    radial-gradient(circle at 92% 8%, rgba(18, 163, 168, 0.14), transparent 42%);
   -webkit-font-smoothing: antialiased;
   overscroll-behavior: none;
 }
@@ -67,14 +81,14 @@ body {
   padding: 16px 18px 4px;
 }
 .saludo { margin: 0; font-size: 1.55rem; line-height: 1.2; font-weight: 800; }
-.saludo .nombre { color: var(--rojo-carpa); }
+.saludo .nombre { color: var(--celeste-osc); }
 .subsaludo { margin: 4px 0 0; color: var(--tinta-suave); font-size: 1.05rem; }
 
-/* Cintas de circo decorativas */
+/* Cintas de circo decorativas (en celeste/calipso) */
 .cinta-circo {
   height: 12px;
   background: repeating-linear-gradient(
-    -45deg, var(--rojo-carpa) 0 18px, var(--crema) 18px 36px
+    -45deg, var(--celeste) 0 18px, var(--calipso) 18px 36px
   );
   opacity: 0.9;
 }
@@ -97,16 +111,16 @@ body {
   transition: transform 0.08s ease, filter 0.12s ease;
   line-height: 1.15;
 }
-.boton-grande:active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(0,0,0,0.12); }
+.boton-grande:active { transform: translateY(4px); box-shadow: 0 2px 0 rgba(12,58,66,0.14); }
 .boton-grande .emoji { font-size: 2.4rem; line-height: 1; }
 .boton-grande small { display: block; font-size: 0.95rem; font-weight: 600; opacity: 0.92; margin-top: 4px; }
 
-.boton-grande.casa { background: linear-gradient(135deg, var(--turquesa), var(--turquesa-osc)); }
-.boton-grande.perdida { background: linear-gradient(135deg, var(--verde-calma), #2f8659); }
-.boton-grande.lugares { background: linear-gradient(135deg, var(--dorado), #d9951f); color: var(--tinta); }
-.boton-grande.lugares small { opacity: 0.75; }
+.boton-grande.casa { background: linear-gradient(135deg, var(--celeste), var(--celeste-osc)); }
+.boton-grande.perdida { background: linear-gradient(135deg, var(--verde-calma), var(--calipso-osc)); }
+.boton-grande.lugares { background: linear-gradient(135deg, var(--dorado), var(--dorado-osc)); color: var(--tinta); }
+.boton-grande.lugares small { opacity: 0.78; }
 
-/* ---------- Barra / botón SOS ---------- */
+/* ---------- Barra / botón SOS (rojo, por seguridad) ---------- */
 .sos-barra {
   position: sticky;
   bottom: 0;
@@ -122,7 +136,7 @@ body {
   font-weight: 900;
   letter-spacing: 0.5px;
   color: #fff;
-  background: linear-gradient(135deg, var(--rojo-carpa), var(--rojo-carpa-osc));
+  background: linear-gradient(135deg, var(--rojo-sos), var(--rojo-sos-osc));
   box-shadow: var(--sombra-suave);
   cursor: pointer;
   display: flex; align-items: center; justify-content: center; gap: 12px;
@@ -140,7 +154,7 @@ body {
   border-radius: var(--radio);
   padding: 18px;
   box-shadow: var(--sombra-suave);
-  border: 2px dashed rgba(226, 59, 82, 0.18); /* costura tipo manualidad */
+  border: 2px dashed rgba(18, 163, 168, 0.22); /* costura tipo manualidad */
 }
 .lugar {
   display: flex; align-items: center; gap: 16px;
@@ -160,15 +174,15 @@ body {
   box-shadow: var(--sombra); display: inline-flex; align-items: center; gap: 10px;
   justify-content: center;
 }
-.boton:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(0,0,0,0.12); }
-.boton.principal { background: var(--turquesa); color: #fff; }
+.boton:active { transform: translateY(3px); box-shadow: 0 1px 0 rgba(12,58,66,0.14); }
+.boton.principal { background: var(--calipso); color: #fff; }
 .boton.dorado { background: var(--dorado); color: var(--tinta); }
 .boton.suave { background: #fff; color: var(--tinta); box-shadow: var(--sombra-suave); }
 .boton.bloque { width: 100%; }
 
 .volver {
   background: none; border: none; font-size: 1.1rem; font-weight: 800;
-  color: var(--rojo-carpa); cursor: pointer; padding: 8px 0; display: inline-flex;
+  color: var(--celeste-osc); cursor: pointer; padding: 8px 0; display: inline-flex;
   align-items: center; gap: 8px;
 }
 
@@ -177,11 +191,11 @@ body {
 /* ---------- Formularios ---------- */
 label { display: block; font-weight: 800; margin: 14px 0 6px; }
 input, textarea {
-  width: 100%; border: 3px solid #eadfce; border-radius: 16px;
+  width: 100%; border: 3px solid #d3ecf3; border-radius: 16px;
   padding: 14px 16px; font-size: 1.15rem; font-family: var(--fuente);
   background: #fff; color: var(--tinta);
 }
-input:focus, textarea:focus { outline: none; border-color: var(--turquesa); }
+input:focus, textarea:focus { outline: none; border-color: var(--celeste-osc); }
 
 /* ---------- Mapa ---------- */
 .mapa-caja { border-radius: var(--radio); overflow: hidden; box-shadow: var(--sombra-suave); }
@@ -198,24 +212,24 @@ input:focus, textarea:focus { outline: none; border-color: var(--turquesa); }
 .mensajes { flex: 1; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; padding-bottom: 8px; }
 .burbuja { max-width: 85%; padding: 16px 18px; border-radius: 22px; font-size: 1.2rem; line-height: 1.35; }
 .burbuja.ia { background: #fff; color: var(--tinta); box-shadow: var(--sombra-suave); border-bottom-left-radius: 6px; align-self: flex-start; }
-.burbuja.yo { background: var(--turquesa); color: #fff; border-bottom-right-radius: 6px; align-self: flex-end; }
+.burbuja.yo { background: var(--celeste-osc); color: #fff; border-bottom-right-radius: 6px; align-self: flex-end; }
 .chat-entrada { display: flex; gap: 10px; align-items: flex-end; }
 .chat-entrada textarea { resize: none; height: 56px; }
 .boton-voz {
   flex: none; width: 62px; height: 62px; border-radius: 50%; border: none;
-  background: var(--rojo-carpa); color: #fff; font-size: 1.6rem; cursor: pointer;
+  background: var(--calipso); color: #fff; font-size: 1.6rem; cursor: pointer;
   box-shadow: var(--sombra-suave);
 }
-.boton-voz.escuchando { animation: latido 1s ease-in-out infinite; background: var(--rojo-carpa-osc); }
+.boton-voz.escuchando { animation: latido 1s ease-in-out infinite; background: var(--calipso-osc); }
 
 /* ---------- Utilidades ---------- */
 .centrado { text-align: center; }
-.aviso { background: #fff4d6; border-radius: 16px; padding: 14px 16px; font-size: 1rem; color: #7a5b00; }
+.aviso { background: #e6f7fb; border-radius: 16px; padding: 14px 16px; font-size: 1rem; color: #0c5b66; }
 .error { background: #ffe0e4; color: #a01528; border-radius: 16px; padding: 14px 16px; }
 .cargando { text-align: center; color: var(--tinta-suave); font-size: 1.1rem; padding: 18px; }
 .chip-fila { display: flex; flex-wrap: wrap; gap: 10px; }
 .chip {
-  background: #fff; border: 2px solid #eadfce; border-radius: 999px;
+  background: #fff; border: 2px solid #d3ecf3; border-radius: 999px;
   padding: 10px 16px; font-size: 1rem; font-weight: 700; cursor: pointer;
 }
 .pie-firma { text-align: center; color: var(--tinta-suave); font-size: 0.85rem; padding: 8px 0 16px; }
